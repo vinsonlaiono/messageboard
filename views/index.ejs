@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Message Board</title>
+    <!-- link for JQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!-- Boostrap CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
+        crossorigin="anonymous">
+    <!-- Socket Link -->
+    <!-- <script type ="text/javascript" src="/socket.io/socket.io.js"></script> -->
+    <script type="text/javascript"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>The Dojo Message Board</h1>
+            <hr>
+        </div>
+        <% if(messages.registration) { %>
+            <% for (var x of messages.registration) { %>
+            <h3><%= x %></h3>
+            <% } %>
+        <% } %>
+        <div class="messages-form">
+            <form action="addMessage" method="post">
+                <input type="text" class="form-control my-2" name="name" id="name" placeholder="Enter your name">
+                <textarea name="message" id="message" class="form-control my-2" placeholder="Leave a Message"></textarea>
+                <button type="submit" class="btn btn-primary float-right">Post Message</button>
+            </form>
+            <a href="/deleteAll" class="btn btn-danger">Delete All</a>
+            <br>
+        </div>
+        <div class="messages">
+            <ul>
+
+            <% for (var x in users) { %>
+                <h5>Name: <%= users[x].name %></h5>
+                <ul>
+                    <% for (var j in users[x]['message']) { %>
+                        <% if(users[x]['message'][j].title) {%>
+                            <h6 class="mb-1"><%=  users[x]['message'][j].title  %></h6>
+                            <ul>
+                                stringify: <%= JSON.stringify(users[x]['message'][j]['posts'][0]) %>
+                                
+                                <% for (var i in users[x]['message'][j]['posts']) { %>
+                                    <% if(users[x]['message'][j]['posts'][i].id) {%>
+                                        
+                                        stringify: <%= JSON.stringify(users[x]['message'][j]['posts'][i]) %>
+                                    
+                                    <% } %>
+                                <% } %>
+                                <form action="addPost/<%=  users[x]['message'][j].id  %>" method="post">
+                                    <input type="text" class="form-control my-2" name="name" id="name" placeholder="Enter your name">
+                                    <textarea name="message" id="message" class="form-control my-2" placeholder="Leave a post"></textarea>
+                                    <button type="submit" class="btn btn-success float-right">Post comment</button>
+                                </form>
+                            </ul>
+                        <% } %>
+                    <% } %>
+                </ul>
+            <% } %>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
